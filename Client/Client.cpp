@@ -25,10 +25,12 @@ int main(int argc, char *argv[])
 	pthread_t woker_thread[2];
 	int status;
 	int arg;
+	char *ip;
+	int port;
 	config.setConfiguration();
 	equipNum = config.getEquipNum();
 	client.makeClient(config.getIp(), config.getPort());
-	client.connectToServer();
+	client.setKeepAlive(1, 10, 3, 1);
 	
 	cout << "Start Client!" << endl;
 
@@ -56,17 +58,27 @@ void *workerThread(void *arg)
 {
 	Tcp client = *(Tcp *)arg;
 	int rsize = 0;
+
 	while (1)
 	{
-		rsize = client.receiveMessage(rbuf, sizeof(rbuf));
+		if (client.connectToServer())
+		{
+			while (1)
+			{
+				rsize = client.receiveMessage(rbuf, sizeof(rbuf));
 
-		if (rsize <= 0) {
-			perror("TCP Receive Error");
-			break;
+				if (rsize <= 0) {
+					perror("TCP Receive Error");
+					client.closeSocket();
+					client.remakeSocket();
+					break;
+				}
+				client.handleMessage(rbuf);
+				client.sendMessage((char*)&client.packet, sizeof(client.packet.head) + client.packet.head.len);
+			}
 		}
-		client.handleMessage(rbuf);
-		client.sendMessage((char*)&client.packet, sizeof(client.packet.head) + client.packet.head.len);
 	}
+
 }
 
 #if 0

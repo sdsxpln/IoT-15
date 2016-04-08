@@ -24,20 +24,28 @@ void Tcp::makeClient(char *ip, int port)
 	saddr.sin_addr.s_addr = inet_addr(ip);
 	
 	saddr.sin_port = htons(port);
+	
+	_ip = ip;
+	_port = port;
 }
 
 
-void Tcp::connectToServer()
+bool Tcp::connectToServer()
 {
 
 #if 1
 	if (connect(sock, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
 	{
 		perror("Can't connect to server : ");
-		return;
+		return false;
 	}
 	else
+	{
 		std::cout << "Connected to sever!!" << std::endl;
+		return true;
+	}
+		
+	
 #endif
 }
 
@@ -78,3 +86,37 @@ void Tcp::showMeassge(char * buf, int sz)
 }
 
 
+
+
+void Tcp::setKeepAlive(int keepalive, int idle, int cnt, int interval)
+{
+
+	if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &keepalive,sizeof(keepalive))) {
+		printf("socket option set error..\n");
+	}
+
+	if (setsockopt(sock, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof(idle))) {
+		printf("socket option set error..\n");
+	}
+
+	if (setsockopt(sock, SOL_TCP, TCP_KEEPCNT, &cnt, sizeof(cnt))) {
+		printf("socket option set error..\n");
+	}
+
+	if (setsockopt(sock, SOL_TCP, TCP_KEEPINTVL, &interval, sizeof(interval))) {
+		printf("socket option set error..\n");
+	}
+	
+}
+
+
+void Tcp::closeSocket()
+{
+	close(sock);
+}
+
+
+void Tcp::remakeSocket()
+{
+	makeClient(_ip, _port);
+}
