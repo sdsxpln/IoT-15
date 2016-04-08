@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{7605bbac-1488-40a0-82a1-b95f11ee9961}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{bd742797-6ad4-436c-97f8-2ce3b277a411}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{5b3d9ea8-00b9-4b51-b78c-5e59df020d31}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="VisualGDB settings">
+      <UniqueIdentifier>{4302e60a-61fa-43bf-9aa5-fc0ea9a85ac5}</UniqueIdentifier>
+      <Extensions>*.vgdbsettings</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Init.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tcp.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveBroadcast.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="DisasterBroadcast.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt">
+      <Filter>Source files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Client-Debug.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="Client-Release.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Init.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tcp.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmd.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="LiveBroadcast.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="DisasterBroadcast.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
