@@ -72,9 +72,8 @@ void Tcp::showMeassge(char * buf, int sz)
 {
 	int i, column;
 
-	printf(" 4  3  2  1\n"
+	printf(" 1  2  3  4\n"
 			"-----------\n");
-
 	for (column = 0, i = 0; i < sz; column++, i++) {
 		if (column == 4) {
 			printf("\n");
@@ -84,9 +83,6 @@ void Tcp::showMeassge(char * buf, int sz)
 	}
 	printf("\n");
 }
-
-
-
 
 void Tcp::setKeepAlive(int keepalive, int idle, int cnt, int interval)
 {

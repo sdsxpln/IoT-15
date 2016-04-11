@@ -26,7 +26,7 @@
 #define NORMAL															(0x01)
 #define ABNORMAL														(0x00)
 
-#define SERVER															(0xAA)
+#define SERVER															(0x01)
 
 #define STORM															(0x01)
 #define FLOOD															(0x02)
