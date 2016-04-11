@@ -18,7 +18,7 @@ void DisasterBroadcast::stormStart()
 }
 
 
-void DisasterBroadcast::stormStop()
+void DisasterBroadcast::stop()
 {
 	std::cout << "Storm Stop!!" << std::endl;
 	system("killall omxplayer.bin");

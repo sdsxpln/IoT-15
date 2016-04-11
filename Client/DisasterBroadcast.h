@@ -8,6 +8,6 @@ public:
 	~DisasterBroadcast();
 	
 	void stormStart();
-	void stormStop();
+	void stop();
 };
 

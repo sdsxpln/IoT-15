@@ -134,11 +134,11 @@ void Message::handleMessage(char *buf)
 	if (msgReceiveHead->cmd == CMD_ALL_NATURE_DISASTER_BROADCAST_STOP)
 	{
 		DisasterBroadcast dbr;
-		struct natureDisasterBroadcastStopRequest *rdata;
-		rdata = (struct natureDisasterBroadcastStopRequest *)(char *)buf + sizeof(msg_head); 
-		if (rdata->kind == STORM)
-		{
-			dbr.stormStop();
+		//struct natureDisasterBroadcastStopRequest *rdata;
+		//rdata = (struct natureDisasterBroadcastStopRequest *)(char *)buf + sizeof(msg_head); 
+		//if (rdata->kind == STORM)
+		//{
+			dbr.stop();
 			struct natureDisasterBroadcastStopAck *sdata;
 			sdata = (struct natureDisasterBroadcastStopAck *)&packet.data;
 			packet.head.source = msgReceiveHead->destination;
@@ -147,6 +147,72 @@ void Message::handleMessage(char *buf)
 			packet.head.len = sizeof(*sdata);
 			//sdata->kind = STORM;
 			sdata->result = NORMAL;
+		//}
+	}
+	
+	if (msgReceiveHead->cmd == CMD_GROUP_NATURE_DISASTER_BROADCAST_START)
+	{
+		Init config;
+		DisasterBroadcast dbr;
+		struct natureDisasterBroadcastStartRequest *rdata;
+		rdata = (struct natureDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head);
+		
+		struct natureDisasterBroadcastStartAck *sdata;
+		sdata = (struct natureDisasterBroadcastStartAck *)&packet.data;
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		
+		config.setConfiguration();
+		if (msgReceiveHead->destination == config.getEquipNum())
+		{
+			int pid = fork();
+			if (pid == 0)
+			{
+				if (rdata->kind == STORM)
+				{
+					dbr.stormStart();
+				}		
+			}
+			else
+				wait();
+			//sdata->kind = STORM;
+			sdata->result = NORMAL;
 		}
+		else
+		{
+			std::cout << "Invalid Destination code(EquipNum : " << config.getEquipNum() << ")" << std::endl;
+			sdata->result = ABNORMAL;
+		}	
+	}
+	if (msgReceiveHead->cmd == CMD_GROUP_NATURE_DISASTER_BROADCAST_STOP)
+	{
+		Init config;
+		config.setConfiguration();
+		struct natureDisasterBroadcastStopAck *sdata;
+		sdata = (struct natureDisasterBroadcastStopAck *)&packet.data;
+		
+		if (msgReceiveHead->destination == config.getEquipNum())
+		{
+			DisasterBroadcast dbr;
+			dbr.stop();
+			
+			packet.head.source = msgReceiveHead->destination;
+			packet.head.destination = msgReceiveHead->source;
+			packet.head.cmd = msgReceiveHead->cmd;
+			packet.head.len = sizeof(*sdata);
+			sdata->result = NORMAL;
+		}
+		else
+		{
+			std::cout << "Invalid Destination code(EquipNum : " << config.getEquipNum() << ")" << std::endl;
+			sdata->result = ABNORMAL;
+		}
+	}
+	
+	if (msgReceiveHead->cmd == CMD_BOARD_REBOOT)
+	{
+		
 	}
 }
