@@ -68,39 +68,23 @@ int Tcp::receiveMessage()
 	
 }
 
-void Tcp::showMeassge(char * buf, int sz)
-{
-	int i, column;
-
-	printf(" 1  2  3  4\n"
-			"-----------\n");
-	for (column = 0, i = 0; i < sz; column++, i++) {
-		if (column == 4) {
-			printf("\n");
-			column = 0;
-		}
-		printf("%02X ", buf[i]);
-	}
-	printf("\n");
-}
-
 void Tcp::setKeepAlive(int keepalive, int idle, int cnt, int interval)
 {
 
 	if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &keepalive,sizeof(keepalive))) {
-		printf("socket option set error..\n");
+		std::cout << "socket option set error" << std::endl;
 	}
 
 	if (setsockopt(sock, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof(idle))) {
-		printf("socket option set error..\n");
+		std::cout << "socket option set error" << std::endl;
 	}
 
 	if (setsockopt(sock, SOL_TCP, TCP_KEEPCNT, &cnt, sizeof(cnt))) {
-		printf("socket option set error..\n");
+		std::cout << "socket option set error" << std::endl;
 	}
 
 	if (setsockopt(sock, SOL_TCP, TCP_KEEPINTVL, &interval, sizeof(interval))) {
-		printf("socket option set error..\n");
+		std::cout << "socket option set error" << std::endl;
 	}
 	
 }

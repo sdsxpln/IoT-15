@@ -19,6 +19,18 @@ int Message::receiveMessage(char *buf, int sz)
 
 void Message::showMeassge(char * buf, int sz)
 {
+	int i, column;
+
+	printf(" 1  2  3  4\n"
+			"-----------\n");
+	for (column = 0, i = 0; i < sz; column++, i++) {
+		if (column == 4) {
+			printf("\n");
+			column = 0;
+		}
+		printf("%02X ", buf[i]);
+	}
+	printf("\n");
 }
 
 void Message::handleMessage(char *buf)

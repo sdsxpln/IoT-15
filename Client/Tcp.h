@@ -33,7 +33,6 @@ public:
 	void sendMessage(char *buf, int sz);
 	int receiveMessage(char *buf, int sz);
 	int receiveMessage();
-	void showMeassge(char * buf, int sz);
 	
 	void setKeepAlive(int keepalive, int idle, int cnt, int interval);
 	
