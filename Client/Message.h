@@ -1,10 +1,11 @@
+#pragma once
 #include <cstdio>
 #include <iostream>
 #include "cmd.h"
 #include "LiveBroadcast.h"
 #include "DisasterBroadcast.h"
 #include "Init.h"
-#pragma once
+//#include "Device.h"
 
 
 class Message

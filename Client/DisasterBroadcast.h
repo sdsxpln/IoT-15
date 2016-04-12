@@ -1,6 +1,7 @@
+#pragma once
 #include <iostream>
 #include <unistd.h>
-#pragma once
+
 class DisasterBroadcast
 {
 public:

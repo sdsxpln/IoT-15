@@ -61,6 +61,7 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Device.cpp" />
     <ClCompile Include="Gpio.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="DisasterBroadcast.cpp" />
@@ -77,6 +78,7 @@
     <None Include="Client-Release.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Device.h" />
     <ClInclude Include="Gpio.h" />
     <ClInclude Include="cmd.h" />
     <ClInclude Include="DisasterBroadcast.h" />

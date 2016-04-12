@@ -40,6 +40,9 @@
     <ClCompile Include="Gpio.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt">
@@ -74,6 +77,9 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="Gpio.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Device.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>

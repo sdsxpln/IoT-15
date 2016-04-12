@@ -6,9 +6,10 @@
 class Init
 {
 private:
-	char Ip[100];
-	int Port;
-	int EqipNum;
+	char ip[100];
+	int port;
+	int group_num;
+	int dev_num;
 	
 public:
 	Init();
@@ -17,6 +18,7 @@ public:
 	void setConfiguration(void);
 	char * getIp(void);
 	int getPort(void);
-	int getEquipNum(void);
+	int getGroupNum(void);
+	int getDevNum(void);
 };
 

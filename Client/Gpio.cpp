@@ -9,21 +9,11 @@ Gpio::~Gpio()
 {
 }
 
-
-void Gpio::checkAmpStatus(void *arg)
+void Gpio::checkAmpStatus(Tcp *client, std::mutex *mtx_lock)
 {
-	Tcp client = *(Tcp *)arg;
 	Init config;
-	struct statusAmp *sdata;
-	sdata = (struct statusAmp *)&client.packet.data;
-	
-	config.setConfiguration();
-
-	client.packet.head.source = config.getEquipNum();
-	client.packet.head.destination = SERVER;
-	client.packet.head.cmd = STATUS_AMP;
-	client.packet.head.len = sizeof(*sdata);
-	
+	statusAmp *sdata;
+	sdata = (statusAmp *)&client->packet.data;
 	
 	if (wiringPiSetupGpio() == -1)
 	{
@@ -36,13 +26,20 @@ void Gpio::checkAmpStatus(void *arg)
 	int result = 0;
 	while (1)
 	{
+		mtx_lock->lock();
+		client->packet.head.source = config.getGroupNum();
+		client->packet.head.destination = SERVER;
+		client->packet.head.cmd = STATUS_AMP;
+		client->packet.head.len = sizeof(*sdata);
+		
 		digitalWrite(5, HIGH);
 		delay(1000);
 		if (digitalRead(4) == LOW)
 		{
 			sdata->result = NORMAL;
-			client.sendMessage((char*)&client.packet, sizeof(client.packet.head) + client.packet.head.len);
+			client->sendMessage((char*)&client->packet, sizeof(client->packet.head) + client->packet.head.len);
 		}
+		mtx_lock->unlock();
 		digitalWrite(5, LOW);
 		delay(500);	
 	}

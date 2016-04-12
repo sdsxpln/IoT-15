@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <cstring>
 #include <netinet/in.h>
@@ -7,10 +8,7 @@
 #include <errno.h>
 #include <error.h>
 #include <unistd.h>
-//#include "cmd.h"
 #include "Message.h"
-#pragma once
-
 
 class Tcp : public Message
 {
@@ -39,4 +37,5 @@ public:
 	void closeSocket();
 	void remakeSocket();
 };
+
 

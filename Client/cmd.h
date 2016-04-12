@@ -1,3 +1,5 @@
+#pragma once
+
 #define MAX_SZ															1024
 
 #define CMD_ALL_LIVE_BROADCAST_START									(0x10)
@@ -22,6 +24,8 @@
 #define	CMD_BOARD_REBOOT												(0x90)
 
 #define STATUS_AMP														(0xA0)
+
+#define STATUS_ALIVE													(0xB0)
 
 #define NORMAL															(0x01)
 #define ABNORMAL														(0x00)
@@ -66,7 +70,7 @@ struct __attribute__((__packed__)) natureDisasterBroadcastStartRequest {
 	unsigned char kind;
 };
 struct __attribute__((__packed__)) natureDisasterBroadcastStartAck {
-	unsigned char kind;
+	//unsigned char kind;
 	unsigned char result;
 };
 
@@ -80,4 +84,8 @@ struct __attribute__((__packed__)) natureDisasterBroadcastStopAck {
 
 struct __attribute__((__packed__)) statusAmp {
 	unsigned char result;		
+};
+
+struct __attribute__((__packed__)) statusAlive {
+	unsigned char devNum;		
 };

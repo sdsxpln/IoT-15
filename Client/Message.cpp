@@ -35,16 +35,16 @@ void Message::showMeassge(char * buf, int sz)
 
 void Message::handleMessage(char *buf)
 {
-	struct msg_head * msgReceiveHead; 
+	msg_head * msgReceiveHead; 
 	
-	msgReceiveHead = (struct msg_head *)buf;
+	msgReceiveHead = (msg_head *)buf;
 	
 	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_START)
 	{
 		LiveBroadcast br;
 		br.start();
-		struct allLiveBroadCastStartAck *sdata;
-		sdata = (struct allLiveBroadCastStartAck *)&packet.data;
+		allLiveBroadCastStartAck *sdata;
+		sdata = (allLiveBroadCastStartAck *)&packet.data;
 
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
@@ -57,8 +57,8 @@ void Message::handleMessage(char *buf)
 	{
 		LiveBroadcast br;
 		br.stop();
-		struct allLiveBroadCastStopAck *sdata;
-		sdata = (struct allLiveBroadCastStopAck *)&packet.data;
+		allLiveBroadCastStopAck *sdata;
+		sdata = (allLiveBroadCastStopAck *)&packet.data;
 
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
@@ -70,16 +70,15 @@ void Message::handleMessage(char *buf)
 #if 1
 	if (msgReceiveHead->cmd == CMD_GROUP_LIVE_BROADCAST_START)
 	{
-		Init config;
-		struct allLiveBroadCastStartAck *sdata;
-		sdata = (struct allLiveBroadCastStartAck *)&packet.data;
+		Init dev;
+		allLiveBroadCastStartAck *sdata;
+		sdata = (allLiveBroadCastStartAck *)&packet.data;
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
 		
-		config.setConfiguration();
-		if (msgReceiveHead->destination == config.getEquipNum())
+		if (msgReceiveHead->destination == dev.getGroupNum())
 		{
 			LiveBroadcast br;
 			br.start();
@@ -87,7 +86,7 @@ void Message::handleMessage(char *buf)
 		}
 		else
 		{
-			std::cout << "Invalid Destination code(EquipNum : " << config.getEquipNum() << ")" << std::endl;
+			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
 		}
 	}
@@ -96,17 +95,16 @@ void Message::handleMessage(char *buf)
 #if 1
 	if (msgReceiveHead->cmd == CMD_GROUP_LIVE_BROADCAST_STOP)
 	{
-		Init config;
-		struct allLiveBroadCastStopAck *sdata;
-		sdata = (struct allLiveBroadCastStopAck *)&packet.data;
+		Init dev;
+		allLiveBroadCastStopAck *sdata;
+		sdata = (allLiveBroadCastStopAck *)&packet.data;
 
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
 		
-		config.setConfiguration();
-		if (msgReceiveHead->destination == config.getEquipNum())
+		if (msgReceiveHead->destination == dev.getGroupNum())
 		{
 			LiveBroadcast br;
 			br.stop();
@@ -114,7 +112,7 @@ void Message::handleMessage(char *buf)
 		}
 		else
 		{
-			std::cout << "Invalid Destination code(EquipNum : " << config.getEquipNum() << ")" << std::endl;
+			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
 		}
 	}
@@ -122,8 +120,8 @@ void Message::handleMessage(char *buf)
 	if (msgReceiveHead->cmd == CMD_ALL_NATURE_DISASTER_BROADCAST_START)
 	{
 		DisasterBroadcast dbr;
-		struct natureDisasterBroadcastStartRequest *rdata;
-		rdata = (struct natureDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head); 
+		natureDisasterBroadcastStartRequest *rdata;
+		rdata = (natureDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head); 
 		int pid = fork();
 		if (pid == 0)
 		{
@@ -134,8 +132,8 @@ void Message::handleMessage(char *buf)
 		}
 		else
 			wait();
-		struct natureDisasterBroadcastStartAck *sdata;
-		sdata = (struct natureDisasterBroadcastStartAck *)&packet.data;
+		natureDisasterBroadcastStartAck *sdata;
+		sdata = (natureDisasterBroadcastStartAck *)&packet.data;
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
 		packet.head.cmd = msgReceiveHead->cmd;
@@ -151,7 +149,7 @@ void Message::handleMessage(char *buf)
 		//if (rdata->kind == STORM)
 		//{
 			dbr.stop();
-			struct natureDisasterBroadcastStopAck *sdata;
+			natureDisasterBroadcastStopAck *sdata;
 			sdata = (struct natureDisasterBroadcastStopAck *)&packet.data;
 			packet.head.source = msgReceiveHead->destination;
 			packet.head.destination = msgReceiveHead->source;
@@ -164,20 +162,20 @@ void Message::handleMessage(char *buf)
 	
 	if (msgReceiveHead->cmd == CMD_GROUP_NATURE_DISASTER_BROADCAST_START)
 	{
-		Init config;
+		//Init config;
+		Init dev;
 		DisasterBroadcast dbr;
-		struct natureDisasterBroadcastStartRequest *rdata;
-		rdata = (struct natureDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head);
+		natureDisasterBroadcastStartRequest *rdata;
+		rdata = (natureDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head);
 		
-		struct natureDisasterBroadcastStartAck *sdata;
-		sdata = (struct natureDisasterBroadcastStartAck *)&packet.data;
+		natureDisasterBroadcastStartAck *sdata;
+		sdata = (natureDisasterBroadcastStartAck *)&packet.data;
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
 		
-		config.setConfiguration();
-		if (msgReceiveHead->destination == config.getEquipNum())
+		if (msgReceiveHead->destination == dev.getGroupNum())
 		{
 			int pid = fork();
 			if (pid == 0)
@@ -194,18 +192,17 @@ void Message::handleMessage(char *buf)
 		}
 		else
 		{
-			std::cout << "Invalid Destination code(EquipNum : " << config.getEquipNum() << ")" << std::endl;
+			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
 		}	
 	}
 	if (msgReceiveHead->cmd == CMD_GROUP_NATURE_DISASTER_BROADCAST_STOP)
 	{
-		Init config;
-		config.setConfiguration();
-		struct natureDisasterBroadcastStopAck *sdata;
-		sdata = (struct natureDisasterBroadcastStopAck *)&packet.data;
+		Init dev;
+		natureDisasterBroadcastStopAck *sdata;
+		sdata = (natureDisasterBroadcastStopAck *)&packet.data;
 		
-		if (msgReceiveHead->destination == config.getEquipNum())
+		if (msgReceiveHead->destination == dev.getGroupNum())
 		{
 			DisasterBroadcast dbr;
 			dbr.stop();
@@ -218,7 +215,7 @@ void Message::handleMessage(char *buf)
 		}
 		else
 		{
-			std::cout << "Invalid Destination code(EquipNum : " << config.getEquipNum() << ")" << std::endl;
+			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
 		}
 	}
