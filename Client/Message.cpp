@@ -222,6 +222,14 @@ void Message::handleMessage(char *buf)
 	
 	if (msgReceiveHead->cmd == CMD_BOARD_REBOOT)
 	{
-		
+		rebootBoard *sdata;
+		sdata = (rebootBoard *)&packet.data;
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		sdata->result = NORMAL;
+	
+		system("sudo reboot -n");
 	}
 }

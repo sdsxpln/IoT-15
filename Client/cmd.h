@@ -89,3 +89,7 @@ struct __attribute__((__packed__)) statusAmp {
 struct __attribute__((__packed__)) statusAlive {
 	unsigned char devNum;		
 };
+
+struct __attribute__((__packed__)) rebootBoard {
+	unsigned char result;		
+};
