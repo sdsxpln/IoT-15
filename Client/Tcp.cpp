@@ -37,11 +37,13 @@ bool Tcp::connectToServer()
 	if (connect(sock, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
 	{
 		perror("Can't connect to server : ");
+		connetStatus = false;
 		return false;
 	}
 	else
 	{
 		std::cout << "Connected to sever!!" << std::endl;
+		connetStatus = true;
 		return true;
 	}
 		
@@ -99,4 +101,10 @@ void Tcp::closeSocket()
 void Tcp::remakeSocket()
 {
 	makeClient(_ip, _port);
+}
+
+
+bool Tcp::getConnectStatus()
+{
+	return connetStatus;
 }

@@ -90,6 +90,10 @@ struct __attribute__((__packed__)) statusAlive {
 	unsigned char devNum;		
 };
 
-struct __attribute__((__packed__)) rebootBoard {
+struct __attribute__((__packed__)) rebootBoardRequest {
+	unsigned char devNum;		
+};
+
+struct __attribute__((__packed__)) rebootBoardAck {
 	unsigned char result;		
 };

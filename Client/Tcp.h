@@ -21,6 +21,7 @@ private:
 	
 	char *_ip;
 	int _port;
+	bool connetStatus;
 	//char rbuf[1024];
 public:
 	Tcp();
@@ -36,6 +37,7 @@ public:
 	
 	void closeSocket();
 	void remakeSocket();
+	bool getConnectStatus();
 };
 
 

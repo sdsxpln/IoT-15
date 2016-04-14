@@ -32,15 +32,16 @@ void Gpio::checkAmpStatus(Tcp *client, std::mutex *mtx_lock)
 		client->packet.head.cmd = STATUS_AMP;
 		client->packet.head.len = sizeof(*sdata);
 		
-		digitalWrite(5, HIGH);
+		//digitalWrite(5, HIGH);
 		delay(1000);
 		if (digitalRead(4) == LOW)
 		{
 			sdata->result = NORMAL;
-			client->sendMessage((char*)&client->packet, sizeof(client->packet.head) + client->packet.head.len);
+			if(client->getConnectStatus())
+				client->sendMessage((char*)&client->packet, sizeof(client->packet.head) + client->packet.head.len);
 		}
 		mtx_lock->unlock();
-		digitalWrite(5, LOW);
+		//digitalWrite(5, LOW);
 		delay(500);	
 	}
 }

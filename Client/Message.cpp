@@ -222,14 +222,26 @@ void Message::handleMessage(char *buf)
 	
 	if (msgReceiveHead->cmd == CMD_BOARD_REBOOT)
 	{
-		rebootBoard *sdata;
-		sdata = (rebootBoard *)&packet.data;
-		packet.head.source = msgReceiveHead->destination;
-		packet.head.destination = msgReceiveHead->source;
-		packet.head.cmd = msgReceiveHead->cmd;
-		packet.head.len = sizeof(*sdata);
-		sdata->result = NORMAL;
+		Init dev;
+		rebootBoardRequest *rdata;
+		rdata = (rebootBoardRequest *)(char *)buf + sizeof(msg_head);
+		
+		if (rdata->devNum == dev.getDevNum())
+		{
+			rebootBoardAck *sdata;
+			sdata = (rebootBoardAck *)&packet.data;
+			packet.head.source = msgReceiveHead->destination;
+			packet.head.destination = msgReceiveHead->source;
+			packet.head.cmd = msgReceiveHead->cmd;
+			packet.head.len = sizeof(*sdata);
+			sdata->result = NORMAL;	
+			
+			system("sudo reboot -n");
+		}
+		else
+			std::cout << "Verify dev number" << std::endl;
+		
 	
-		system("sudo reboot -n");
+		
 	}
 }
