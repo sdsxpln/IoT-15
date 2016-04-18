@@ -10,9 +10,10 @@
 
 class Message
 {
+private:
+	bool selectSendingPacket;
 public:
 	msgPacket packet;
-
 	Message();
 	virtual ~Message();
 	
@@ -20,7 +21,6 @@ public:
 	int receiveMessage(char *buf, int sz);
 	void showMeassge(char * buf, int sz);
 	void handleMessage(char *buf);
-
-	
+	bool getSelectedSend();
 };
 

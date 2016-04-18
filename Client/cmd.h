@@ -41,6 +41,11 @@
 #define EARTHQUAKE														(0x07)
 #define N_ETC															(0x08)
 
+#define FIRE															(0x01)
+#define COLLAPSE														(0x02)
+#define EXPLOSION														(0x03)
+#define ACCIDENT														(0x04)
+#define S_ETC															(0x05)
 
 struct __attribute__((__packed__)) msg_head {
 	char source;
@@ -78,6 +83,24 @@ struct __attribute__((__packed__)) natureDisasterBroadcastStopRequest {
 	unsigned char kind;
 };
 struct __attribute__((__packed__)) natureDisasterBroadcastStopAck {
+	//unsigned char kind;
+	unsigned char result;
+};
+
+struct __attribute__((__packed__)) societyDisasterBroadcastStartRequest {
+	unsigned char kind;
+};
+
+struct __attribute__((__packed__)) societyDisasterBroadcastStartAck {
+	//unsigned char kind;
+	unsigned char result;
+};
+
+struct __attribute__((__packed__)) societyDisasterBroadcastStopRequest {
+	unsigned char kind;
+};
+
+struct __attribute__((__packed__)) societyDisasterBroadcastStopAck {
 	//unsigned char kind;
 	unsigned char result;
 };

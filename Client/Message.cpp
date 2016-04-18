@@ -39,6 +39,8 @@ void Message::handleMessage(char *buf)
 	
 	msgReceiveHead = (msg_head *)buf;
 	
+	selectSendingPacket = false;
+	
 	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_START)
 	{
 		LiveBroadcast br;
@@ -51,6 +53,8 @@ void Message::handleMessage(char *buf)
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
 		sdata->result = NORMAL;
+		
+		selectSendingPacket = true;
 	}
 	
 	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_STOP)
@@ -65,6 +69,8 @@ void Message::handleMessage(char *buf)
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
 		sdata->result = NORMAL;
+		
+		selectSendingPacket = true;
 	}
 
 #if 1
@@ -83,11 +89,14 @@ void Message::handleMessage(char *buf)
 			LiveBroadcast br;
 			br.start();
 			sdata->result = NORMAL;
+			
+			selectSendingPacket = true;
 		}
 		else
 		{
 			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
+			selectSendingPacket = false;
 		}
 	}
 #endif
@@ -109,11 +118,13 @@ void Message::handleMessage(char *buf)
 			LiveBroadcast br;
 			br.stop();
 			sdata->result = NORMAL;
+			selectSendingPacket = true;
 		}
 		else
 		{
 			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
+			selectSendingPacket = false;
 		}
 	}
 #endif
@@ -122,47 +133,80 @@ void Message::handleMessage(char *buf)
 		DisasterBroadcast dbr;
 		natureDisasterBroadcastStartRequest *rdata;
 		rdata = (natureDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head); 
-		int pid = fork();
-		if (pid == 0)
-		{
-			if (rdata->kind == STORM)
-			{
-				dbr.stormStart();
-			}		
-		}
-		else
-			wait();
+		
 		natureDisasterBroadcastStartAck *sdata;
 		sdata = (natureDisasterBroadcastStartAck *)&packet.data;
+		
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
-		//sdata->kind = STORM;
-		sdata->result = NORMAL;
+		
+		int pid = fork();
+		if (pid == 0)
+		{
+			switch (rdata->kind)
+			{
+			case STORM :
+				dbr.stormStart();
+				sdata->result = NORMAL;
+				break;
+			case FLOOD :
+				dbr.floodStart();
+				sdata->result = NORMAL;
+				break;
+			case HEAVY_RAIN :
+				dbr.heavyRainStart();
+				sdata->result = NORMAL;
+				break;
+			case TSUNAMI :
+				dbr.tsunamiStart();
+				sdata->result = NORMAL;
+				break;
+			case HEAVY_SNOW :
+				dbr.heavySnowStart();
+				sdata->result = NORMAL;
+				break;
+			case DROUGHT :
+				dbr.droughtStart();
+				sdata->result = NORMAL;
+				break;
+			case EARTHQUAKE :
+				dbr.earthquakeStart();
+				sdata->result = NORMAL;
+				break;
+			case N_ETC :
+				dbr.nEtcStart();
+				sdata->result = NORMAL;
+				break;
+			default : 
+				std::cout << "Invalid kind of disaster!!" << std::endl;
+				sdata->result = ABNORMAL;
+			}
+		}
+		else
+			wait();
+		
+		selectSendingPacket = true;
 	}
 	if (msgReceiveHead->cmd == CMD_ALL_NATURE_DISASTER_BROADCAST_STOP)
 	{
 		DisasterBroadcast dbr;
-		//struct natureDisasterBroadcastStopRequest *rdata;
-		//rdata = (struct natureDisasterBroadcastStopRequest *)(char *)buf + sizeof(msg_head); 
-		//if (rdata->kind == STORM)
-		//{
-			dbr.stop();
-			natureDisasterBroadcastStopAck *sdata;
-			sdata = (struct natureDisasterBroadcastStopAck *)&packet.data;
-			packet.head.source = msgReceiveHead->destination;
-			packet.head.destination = msgReceiveHead->source;
-			packet.head.cmd = msgReceiveHead->cmd;
-			packet.head.len = sizeof(*sdata);
-			//sdata->kind = STORM;
-			sdata->result = NORMAL;
-		//}
+	
+		dbr.stop();
+		natureDisasterBroadcastStopAck *sdata;
+		sdata = (natureDisasterBroadcastStopAck *)&packet.data;
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		sdata->result = NORMAL;
+		
+		selectSendingPacket = true;
 	}
 	
 	if (msgReceiveHead->cmd == CMD_GROUP_NATURE_DISASTER_BROADCAST_START)
 	{
-		//Init config;
 		Init dev;
 		DisasterBroadcast dbr;
 		natureDisasterBroadcastStartRequest *rdata;
@@ -180,20 +224,55 @@ void Message::handleMessage(char *buf)
 			int pid = fork();
 			if (pid == 0)
 			{
-				if (rdata->kind == STORM)
+				switch (rdata->kind)
 				{
+				case STORM :
 					dbr.stormStart();
-				}		
+					sdata->result = NORMAL;
+					break;
+				case FLOOD :
+					dbr.floodStart();
+					sdata->result = NORMAL;
+					break;
+				case HEAVY_RAIN :
+					dbr.heavyRainStart();
+					sdata->result = NORMAL;
+					break;
+				case TSUNAMI :
+					dbr.tsunamiStart();
+					sdata->result = NORMAL;
+					break;
+				case HEAVY_SNOW :
+					dbr.heavySnowStart();
+					sdata->result = NORMAL;
+					break;
+				case DROUGHT :
+					dbr.droughtStart();
+					sdata->result = NORMAL;
+					break;
+				case EARTHQUAKE :
+					dbr.earthquakeStart();
+					sdata->result = NORMAL;
+					break;
+				case N_ETC :
+					dbr.nEtcStart();
+					sdata->result = NORMAL;
+					break;
+				default : 
+					std::cout << "Invalid kind of disaster!!" << std::endl;
+					sdata->result = ABNORMAL;
+				}
 			}
 			else
 				wait();
-			//sdata->kind = STORM;
-			sdata->result = NORMAL;
+			
+			selectSendingPacket = true;
 		}
 		else
 		{
 			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
+			selectSendingPacket = false;
 		}	
 	}
 	if (msgReceiveHead->cmd == CMD_GROUP_NATURE_DISASTER_BROADCAST_STOP)
@@ -202,22 +281,178 @@ void Message::handleMessage(char *buf)
 		natureDisasterBroadcastStopAck *sdata;
 		sdata = (natureDisasterBroadcastStopAck *)&packet.data;
 		
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		
 		if (msgReceiveHead->destination == dev.getGroupNum())
 		{
 			DisasterBroadcast dbr;
 			dbr.stop();
-			
-			packet.head.source = msgReceiveHead->destination;
-			packet.head.destination = msgReceiveHead->source;
-			packet.head.cmd = msgReceiveHead->cmd;
-			packet.head.len = sizeof(*sdata);
 			sdata->result = NORMAL;
+			selectSendingPacket = true;
 		}
 		else
 		{
 			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
 			sdata->result = ABNORMAL;
+			selectSendingPacket = false;
 		}
+	}
+	
+	if (msgReceiveHead->cmd == CMD_ALL_SOCIETY_DISASTER_BROADCAST_START)
+	{
+		DisasterBroadcast dbr;
+		societyDisasterBroadcastStartRequest *rdata;
+		rdata = (societyDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head); 
+		
+		societyDisasterBroadcastStartAck *sdata;
+		sdata = (societyDisasterBroadcastStartAck *)&packet.data;
+		
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		
+		int pid = fork();
+		if (pid == 0)
+		{
+			switch (rdata->kind)
+			{
+			case FIRE :
+				dbr.fireStart();
+				sdata->result = NORMAL;
+				break;
+			case COLLAPSE :
+				dbr.collapseStart();
+				sdata->result = NORMAL;
+				break;
+			case EXPLOSION :
+				dbr.explosionStart();
+				sdata->result = NORMAL;
+				break;
+			case ACCIDENT :
+				dbr.accidentStart();
+				sdata->result = NORMAL;
+				break;
+			case S_ETC :
+				dbr.sEtcStart();
+				sdata->result = NORMAL;
+				break;
+			default : 
+				std::cout << "Invalid kind of disaster!!" << std::endl;
+				sdata->result = ABNORMAL;
+			}
+		}
+		else
+			wait();
+		
+		selectSendingPacket = true;
+		
+	}
+	
+	if (msgReceiveHead->cmd == CMD_ALL_SOCIETY_DISASTER_BROADCAST_STOP)
+	{
+		DisasterBroadcast dbr;
+	
+		dbr.stop();
+		societyDisasterBroadcastStopAck *sdata;
+		sdata = (societyDisasterBroadcastStopAck *)&packet.data;
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		sdata->result = NORMAL;
+		
+		selectSendingPacket = true;
+	}
+	
+	if (msgReceiveHead->cmd == CMD_GROUP_SOCIETY_DISASTER_BROADCAST_START)
+	{
+		Init dev;
+		DisasterBroadcast dbr;
+		societyDisasterBroadcastStartRequest *rdata;
+		rdata = (societyDisasterBroadcastStartRequest *)(char *)buf + sizeof(msg_head);
+		
+		societyDisasterBroadcastStartAck *sdata;
+		sdata = (societyDisasterBroadcastStartAck *)&packet.data;
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		
+		if (msgReceiveHead->destination == dev.getGroupNum())
+		{
+			int pid = fork();
+			if (pid == 0)
+			{
+				switch (rdata->kind)
+				{
+				case FIRE :
+					dbr.fireStart();
+					sdata->result = NORMAL;
+					break;
+				case COLLAPSE :
+					dbr.collapseStart();
+					sdata->result = NORMAL;
+					break;
+				case EXPLOSION :
+					dbr.explosionStart();
+					sdata->result = NORMAL;
+					break;
+				case ACCIDENT :
+					dbr.accidentStart();
+					sdata->result = NORMAL;
+					break;
+				case S_ETC :
+					dbr.sEtcStart();
+					sdata->result = NORMAL;
+					break;
+				default : 
+					std::cout << "Invalid kind of disaster!!" << std::endl;
+					sdata->result = ABNORMAL;
+				}
+			}
+			else
+				wait();
+			
+			selectSendingPacket = true;
+		}
+		else
+		{
+			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
+			sdata->result = ABNORMAL;
+			selectSendingPacket = false;
+		}	
+		
+	}
+	
+	if (msgReceiveHead->cmd == CMD_GROUP_SOCIETY_DISASTER_BROADCAST_STOP)
+	{
+		Init dev;
+		societyDisasterBroadcastStopAck *sdata;
+		sdata = (societyDisasterBroadcastStopAck *)&packet.data;
+		
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		
+		if (msgReceiveHead->destination == dev.getGroupNum())
+		{
+			DisasterBroadcast dbr;
+			dbr.stop();
+			sdata->result = NORMAL;
+			selectSendingPacket = true;
+		}
+		else
+		{
+			std::cout << "Invalid Destination code(GroupNum : " << dev.getGroupNum() << ")" << std::endl;
+			sdata->result = ABNORMAL;
+			selectSendingPacket = false;
+		}
+		
 	}
 	
 	if (msgReceiveHead->cmd == CMD_BOARD_REBOOT)
@@ -226,22 +461,31 @@ void Message::handleMessage(char *buf)
 		rebootBoardRequest *rdata;
 		rdata = (rebootBoardRequest *)(char *)buf + sizeof(msg_head);
 		
+		rebootBoardAck *sdata;
+		sdata = (rebootBoardAck *)&packet.data;
+		
+		packet.head.source = msgReceiveHead->destination;
+		packet.head.destination = msgReceiveHead->source;
+		packet.head.cmd = msgReceiveHead->cmd;
+		packet.head.len = sizeof(*sdata);
+		
 		if (rdata->devNum == dev.getDevNum())
 		{
-			rebootBoardAck *sdata;
-			sdata = (rebootBoardAck *)&packet.data;
-			packet.head.source = msgReceiveHead->destination;
-			packet.head.destination = msgReceiveHead->source;
-			packet.head.cmd = msgReceiveHead->cmd;
-			packet.head.len = sizeof(*sdata);
-			sdata->result = NORMAL;	
-			
+			sdata->result = NORMAL;		
 			system("sudo reboot -n");
+			selectSendingPacket = true;
 		}
 		else
-			std::cout << "Verify dev number" << std::endl;
-		
-	
-		
+		{
+			sdata->result = ABNORMAL;
+			std::cout << "Invalid dev number" << std::endl;
+			selectSendingPacket = false;
+		}	
 	}
+}
+
+
+bool Message::getSelectedSend()
+{
+	return selectSendingPacket;
 }

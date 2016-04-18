@@ -22,7 +22,7 @@ private:
 	char *_ip;
 	int _port;
 	bool connetStatus;
-	//char rbuf[1024];
+	
 public:
 	Tcp();
 	virtual ~Tcp();

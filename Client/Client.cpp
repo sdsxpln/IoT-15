@@ -10,7 +10,6 @@
 #include "Gpio.h"
 #include "Device.h"
 
-
 using namespace std;
 
 void workerThread(Tcp *client, mutex *mtx_lock);
@@ -50,7 +49,6 @@ void workerThread(Tcp *client, mutex *mtx_lock)
 			while (1)
 			{
 				rsize = client->receiveMessage(rbuf, sizeof(rbuf));
-				client->showMeassge(rbuf, rsize);
 
 				if (rsize <= 0) {
 					perror("TCP Receive Error");
@@ -58,9 +56,11 @@ void workerThread(Tcp *client, mutex *mtx_lock)
 					client->remakeSocket();
 					break;
 				}
+				client->showMeassge(rbuf, rsize);
 				mtx_lock->lock();
 				client->handleMessage(rbuf);
-				client->sendMessage((char*)&client->packet, sizeof(client->packet.head) + client->packet.head.len);
+				if (client->getSelectedSend())
+					client->sendMessage((char*)&client->packet, sizeof(client->packet.head) + client->packet.head.len);
 				mtx_lock->unlock();
 			}
 		}
