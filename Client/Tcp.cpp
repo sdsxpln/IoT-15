@@ -3,6 +3,7 @@
 
 Tcp::Tcp()
 {
+	connetStatus = false;
 }
 
 Tcp::~Tcp()
@@ -25,8 +26,9 @@ void Tcp::makeClient(char *ip, int port)
 	
 	saddr.sin_port = htons(port);
 	
-	_ip = ip;
-	_port = port;
+	this->ip = ip;
+	this->port = port;
+	
 }
 
 
@@ -53,15 +55,17 @@ bool Tcp::connectToServer()
 
 void Tcp::sendMessage(char *buf, int sz)
 {
-	
 	ssize = write(sock, buf, sz);
-	
+	if (ssize < 0)
+	{
+		perror("send error");
+	}
+		
 }
 
 int Tcp::receiveMessage(char *buf, int sz)
 {
 	rsize = read(sock, buf, sz);
-	
 	return rsize;
 }
 
@@ -100,7 +104,7 @@ void Tcp::closeSocket()
 
 void Tcp::remakeSocket()
 {
-	makeClient(_ip, _port);
+	makeClient(this->ip, this->port);
 }
 
 

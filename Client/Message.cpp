@@ -41,23 +41,33 @@ void Message::handleMessage(char *buf)
 	
 	selectSendingPacket = false;
 	
-	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_START)
-	{
+	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_START) 
+	{		
+
 		LiveBroadcast br;
 		br.start();
+		
 		allLiveBroadCastStartAck *sdata;
 		sdata = (allLiveBroadCastStartAck *)&packet.data;
-
+		
 		packet.head.source = msgReceiveHead->destination;
 		packet.head.destination = msgReceiveHead->source;
 		packet.head.cmd = msgReceiveHead->cmd;
 		packet.head.len = sizeof(*sdata);
 		sdata->result = NORMAL;
 		
+		FILE *fd = popen("ip addr | grep \"inet\" | grep brd | grep eth0 | awk '{print $2}' | awk -F/ '{print $1}'", "r");
+		if (fd != NULL) {
+			fgets(sdata->devIP, sizeof(sdata->devIP), fd);
+		}
+		pclose(fd);
+		
+		packet.head.len = strlen(sdata->devIP) + sizeof(sdata->result) -1 ; //line feed 제거
 		selectSendingPacket = true;
+
 	}
-	
-	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_STOP)
+
+	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_STOP)	
 	{
 		LiveBroadcast br;
 		br.stop();
@@ -73,7 +83,6 @@ void Message::handleMessage(char *buf)
 		selectSendingPacket = true;
 	}
 
-#if 1
 	if (msgReceiveHead->cmd == CMD_GROUP_LIVE_BROADCAST_START)
 	{
 		Init dev;
@@ -90,6 +99,14 @@ void Message::handleMessage(char *buf)
 			br.start();
 			sdata->result = NORMAL;
 			
+			FILE *fd = popen("ip addr | grep \"inet\" | grep brd | grep eth0 | awk '{print $2}' | awk -F/ '{print $1}'", "r");
+			if (fd != NULL) {
+				fgets(sdata->devIP, sizeof(sdata->devIP), fd);
+			}
+			pclose(fd);
+		
+			packet.head.len = strlen(sdata->devIP) + sizeof(sdata->result) - 1; //line feed 제거
+			
 			selectSendingPacket = true;
 		}
 		else
@@ -99,9 +116,7 @@ void Message::handleMessage(char *buf)
 			selectSendingPacket = false;
 		}
 	}
-#endif
 	
-#if 1
 	if (msgReceiveHead->cmd == CMD_GROUP_LIVE_BROADCAST_STOP)
 	{
 		Init dev;
@@ -127,7 +142,7 @@ void Message::handleMessage(char *buf)
 			selectSendingPacket = false;
 		}
 	}
-#endif
+
 	if (msgReceiveHead->cmd == CMD_ALL_NATURE_DISASTER_BROADCAST_START)
 	{
 		DisasterBroadcast dbr;
@@ -488,4 +503,22 @@ void Message::handleMessage(char *buf)
 bool Message::getSelectedSend()
 {
 	return selectSendingPacket;
+}
+
+
+msgPacket* Message::getpacket()
+{
+	return &packet;
+}
+
+
+int Message::getpacketSize()
+{
+	return packet.head.len + sizeof(packet.head);
+}
+
+
+void Message::makePacket(msgPacket msg)
+{
+	packet = msg;
 }

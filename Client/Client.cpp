@@ -14,8 +14,6 @@ using namespace std;
 
 void workerThread(Tcp *client, mutex *mtx_lock);
 
-char rbuf[MAX_SZ];
-
 int main(int argc, char *argv[])
 {
 	Tcp client;
@@ -27,9 +25,9 @@ int main(int argc, char *argv[])
 	
 	cout << "Start Client!" << endl;
 
-	thread th1(workerThread, &client, &mtx_lock);
-	thread th2(&Gpio::checkAmpStatus, Gpio(), &client, &mtx_lock);
-	thread th3(&Device::checkAlive, Device(), &client, &mtx_lock);
+	thread th1(workerThread, &client, &mtx_lock);						//기능 수행 Thread
+	thread th2(&Gpio::checkAmpStatus, Gpio(), &client, &mtx_lock);		//Amp상태 점검 Thread
+	thread th3(&Device::checkAlive, Device(), &client, &mtx_lock);		//Device Alive Thread
 
 	th1.join();
 	th2.join();
@@ -38,13 +36,16 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+/*Server로부터 Command를 전송받아 경보기능을 수행 */
 void workerThread(Tcp *client, mutex *mtx_lock)
 {
+	char rbuf[MAX_SZ];	
+	
 	int rsize = 0;
 	
 	while (1)
 	{
-		if (client->connectToServer())
+		if (client->connectToServer())	
 		{
 			while (1)
 			{
@@ -57,11 +58,11 @@ void workerThread(Tcp *client, mutex *mtx_lock)
 					break;
 				}
 				client->showMeassge(rbuf, rsize);
-				mtx_lock->lock();
+				mtx_lock->lock();				
 				client->handleMessage(rbuf);
-				if (client->getSelectedSend())
-					client->sendMessage((char*)&client->packet, sizeof(client->packet.head) + client->packet.head.len);
-				mtx_lock->unlock();
+				if (client->getSelectedSend())	//서버로 메시지를 전송할지 결정(Group에 맞지 않으면 패스)
+					client->sendMessage((char*)client->getpacket(), client->getpacketSize());
+				mtx_lock->unlock();				
 			}
 		}
 	}

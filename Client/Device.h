@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -13,7 +14,7 @@ class Device
 public:
 	Device();
 	virtual ~Device();
-	
+
 	void checkAlive(Tcp *client, std::mutex *mtx_lock);
 };
 

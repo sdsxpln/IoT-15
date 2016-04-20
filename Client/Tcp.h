@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <cstring>
 #include <netinet/in.h>
@@ -19,8 +20,8 @@ private:
 	int opt;
 	int ssize, rsize;
 	
-	char *_ip;
-	int _port;
+	char *ip;
+	int port;
 	bool connetStatus;
 	
 public:

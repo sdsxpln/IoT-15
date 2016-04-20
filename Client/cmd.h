@@ -55,13 +55,14 @@ struct __attribute__((__packed__)) msg_head {
 };
 struct __attribute__((__packed__)) msgPacket {
 	msg_head head;
-	void *data;
+	char data[MAX_SZ];
 };
 struct __attribute__((__packed__)) allLiveBroadCastStartRequest {
 	
 };
 struct __attribute__((__packed__)) allLiveBroadCastStartAck {
-	unsigned char result;		
+	unsigned char result;
+	char devIP[20];
 };
 
 struct __attribute__((__packed__)) allLiveBroadCastStopRequest {
@@ -75,7 +76,6 @@ struct __attribute__((__packed__)) natureDisasterBroadcastStartRequest {
 	unsigned char kind;
 };
 struct __attribute__((__packed__)) natureDisasterBroadcastStartAck {
-	//unsigned char kind;
 	unsigned char result;
 };
 
@@ -83,7 +83,6 @@ struct __attribute__((__packed__)) natureDisasterBroadcastStopRequest {
 	unsigned char kind;
 };
 struct __attribute__((__packed__)) natureDisasterBroadcastStopAck {
-	//unsigned char kind;
 	unsigned char result;
 };
 
@@ -92,7 +91,6 @@ struct __attribute__((__packed__)) societyDisasterBroadcastStartRequest {
 };
 
 struct __attribute__((__packed__)) societyDisasterBroadcastStartAck {
-	//unsigned char kind;
 	unsigned char result;
 };
 
@@ -101,7 +99,6 @@ struct __attribute__((__packed__)) societyDisasterBroadcastStopRequest {
 };
 
 struct __attribute__((__packed__)) societyDisasterBroadcastStopAck {
-	//unsigned char kind;
 	unsigned char result;
 };
 
