@@ -77,14 +77,23 @@
 #ifndef __LACCUM_IBIT__
 #define __LACCUM_IBIT__ 32
 #endif
+#ifndef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1
+#endif
+#ifndef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 1
+#endif
 #ifndef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
 #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
 #endif
 #ifndef __DBL_DENORM_MIN__
 #define __DBL_DENORM_MIN__ double(4.9406564584124654e-324L)
 #endif
+#ifndef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 1
+#endif
 #ifndef __GCC_ATOMIC_CHAR_LOCK_FREE
-#define __GCC_ATOMIC_CHAR_LOCK_FREE 1
+#define __GCC_ATOMIC_CHAR_LOCK_FREE 2
 #endif
 #ifndef __FLT_EVAL_METHOD__
 #define __FLT_EVAL_METHOD__ 0
@@ -152,6 +161,9 @@
 #ifndef __FRACT_MAX__
 #define __FRACT_MAX__ 0X7FFFP-15R
 #endif
+#ifndef __thumb2__
+#define __thumb2__ 1
+#endif
 #ifndef __UFRACT_FBIT__
 #define __UFRACT_FBIT__ 16
 #endif
@@ -165,7 +177,7 @@
 #define __UINT_LEAST8_MAX__ 255
 #endif
 #ifndef __GCC_ATOMIC_BOOL_LOCK_FREE
-#define __GCC_ATOMIC_BOOL_LOCK_FREE 1
+#define __GCC_ATOMIC_BOOL_LOCK_FREE 2
 #endif
 #ifndef __UINTMAX_TYPE__
 #define __UINTMAX_TYPE__ long long unsigned int
@@ -228,7 +240,7 @@
 #define __SIZEOF_POINTER__ 4
 #endif
 #ifndef __GCC_ATOMIC_CHAR16_T_LOCK_FREE
-#define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 1
+#define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 2
 #endif
 #ifndef __USACCUM_IBIT__
 #define __USACCUM_IBIT__ 8
@@ -387,7 +399,7 @@
 #define __LDBL_HAS_DENORM__ 1
 #endif
 #ifndef __ARM_FEATURE_LDREX
-#define __ARM_FEATURE_LDREX 4
+#define __ARM_FEATURE_LDREX 15
 #endif
 //VS2005-2012 treats all files as C++, while VS2013+ can treat C files correctly.
 #if defined(_MSC_VER) && (_MSC_VER < 1800 || defined(__cplusplus))
@@ -606,6 +618,9 @@
 #ifndef __INT8_TYPE__
 #define __INT8_TYPE__ signed char
 #endif
+#ifndef __thumb__
+#define __thumb__ 1
+#endif
 #ifndef __ELF__
 #define __ELF__ 1
 #endif
@@ -620,6 +635,9 @@
 #endif
 #ifndef __INT_LEAST16_TYPE__
 #define __INT_LEAST16_TYPE__ short int
+#endif
+#ifndef __ARM_ARCH_PROFILE
+#define __ARM_ARCH_PROFILE 65
 #endif
 #ifndef __LDBL_EPSILON__
 #define __LDBL_EPSILON__ 2.2204460492503131e-16L
@@ -647,9 +665,6 @@
 #endif
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 2147483647
-#endif
-#ifndef __ARM_ARCH_6__
-#define __ARM_ARCH_6__ 1
 #endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 4294967295U
@@ -730,13 +745,13 @@
 #define __DEC32_MAX_EXP__ 97
 #endif
 #ifndef __ARM_ARCH_ISA_THUMB
-#define __ARM_ARCH_ISA_THUMB 1
+#define __ARM_ARCH_ISA_THUMB 2
 #endif
 #ifndef __INT_FAST8_MAX__
 #define __INT_FAST8_MAX__ 127
 #endif
 #ifndef __ARM_ARCH
-#define __ARM_ARCH 6
+#define __ARM_ARCH 7
 #endif
 #ifndef __INTPTR_MAX__
 #define __INTPTR_MAX__ 2147483647
@@ -776,6 +791,9 @@
 #endif
 #ifndef __SIZEOF_FLOAT__
 #define __SIZEOF_FLOAT__ 4
+#endif
+#ifndef __THUMBEL__
+#define __THUMBEL__ 1
 #endif
 #ifndef __USQ_FBIT__
 #define __USQ_FBIT__ 32
@@ -857,6 +875,9 @@
 #endif
 #ifndef __WCHAR_UNSIGNED__
 #define __WCHAR_UNSIGNED__ 1
+#endif
+#ifndef __ARM_ARCH_7A__
+#define __ARM_ARCH_7A__ 1
 #endif
 #ifndef __LDBL_MAX_10_EXP__
 #define __LDBL_MAX_10_EXP__ 308
@@ -1024,7 +1045,7 @@
 #define __SACCUM_IBIT__ 8
 #endif
 #ifndef __GCC_ATOMIC_LLONG_LOCK_FREE
-#define __GCC_ATOMIC_LLONG_LOCK_FREE 1
+#define __GCC_ATOMIC_LLONG_LOCK_FREE 2
 #endif
 #ifndef __LDBL_DIG__
 #define __LDBL_DIG__ 15
@@ -1036,7 +1057,7 @@
 #define __UINT_FAST16_MAX__ 4294967295U
 #endif
 #ifndef __GCC_ATOMIC_SHORT_LOCK_FREE
-#define __GCC_ATOMIC_SHORT_LOCK_FREE 1
+#define __GCC_ATOMIC_SHORT_LOCK_FREE 2
 #endif
 #ifndef __ULLFRACT_MAX__
 #define __ULLFRACT_MAX__ 0XFFFFFFFFFFFFFFFFP-64ULLR

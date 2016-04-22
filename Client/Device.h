@@ -8,6 +8,7 @@
 #include "cmd.h"
 #include "Tcp.h"
 #include "Init.h"
+#include "Ossl.h"
 
 class Device
 {

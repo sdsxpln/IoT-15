@@ -20,17 +20,17 @@ int Message::receiveMessage(char *buf, int sz)
 void Message::showMeassge(char * buf, int sz)
 {
 	int i, column;
-
-	printf(" 1  2  3  4\n"
-			"-----------\n");
+	std::cout << " 1  2  3  4" << std::endl;
+	std::cout << "-----------" << std::endl;
 	for (column = 0, i = 0; i < sz; column++, i++) {
 		if (column == 4) {
-			printf("\n");
+			std::cout << std::endl;
 			column = 0;
 		}
-		printf("%02X ", buf[i]);
+		std::cout << std::setfill('0')<<std::setw(2)<<std::hex << (int)buf[i]<<" "; 
 	}
-	printf("\n");
+	std::cout << std::endl;
+	std::cout << "-----------" << std::endl;
 }
 
 void Message::handleMessage(char *buf)

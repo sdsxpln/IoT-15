@@ -16,7 +16,6 @@ public:
 	Init();
 	virtual ~Init();
 	
-	void setConfiguration(void);
 	char * getIp(void);
 	int getPort(void);
 	int getGroupNum(void);

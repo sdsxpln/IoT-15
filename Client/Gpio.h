@@ -5,6 +5,7 @@
 #include <mutex>
 #include "Tcp.h"
 #include "Init.h"
+#include "Ossl.h"
 
 #pragma once
 class Gpio

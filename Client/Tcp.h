@@ -9,12 +9,19 @@
 #include <errno.h>
 #include <error.h>
 #include <unistd.h>
+
+#include <openssl/crypto.h>
+#include <openssl/x509.h>
+#include <openssl/pem.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
 #include "Message.h"
 
 class Tcp : public Message
 {
 private:
-	int sock;
+	//int sock;
 	struct sockaddr_in saddr, caddr;
 	socklen_t addrlen;
 	int opt;
@@ -23,22 +30,27 @@ private:
 	char *ip;
 	int port;
 	bool connetStatus;
-	
+protected:
+	int sock;
 public:
 	Tcp();
 	virtual ~Tcp();
 	
 	void makeClient(char *ip, int port);
-	bool connectToServer();
-	void sendMessage(char *buf, int sz);
+	bool connectToServer(void);
+	int sendMessage(char *buf, int sz);
 	int receiveMessage(char *buf, int sz);
-	int receiveMessage();
+	int receiveMessage(void);
 	
 	void setKeepAlive(int keepalive, int idle, int cnt, int interval);
 	
-	void closeSocket();
-	void remakeSocket();
+	void closeSocket(void);
+	void remakeSocket(void);
 	bool getConnectStatus();
+	
+	virtual void setSSL(void);
+	virtual void connectSSL(void);
+	virtual void closeSSL(void);
 };
 
 
