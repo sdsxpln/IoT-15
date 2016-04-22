@@ -21,7 +21,7 @@ public:
 	Message();
 	virtual ~Message();
 	
-	void sendMessage(char *buf, int sz);
+	int sendMessage(char *buf, int sz);
 	int receiveMessage(char *buf, int sz);
 	void showMeassge(char * buf, int sz);
 	void handleMessage(char *buf);

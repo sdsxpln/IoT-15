@@ -10,7 +10,6 @@ Device::~Device()
 {
 }
 
-
 void Device::checkAlive(Tcp *client, std::mutex *mtx_lock)
 {
 	Init config;

@@ -55,12 +55,8 @@ bool Tcp::connectToServer(void)
 
 int Tcp::sendMessage(char *buf, int sz)
 {
-	//ssize = write(sock, buf, sz);
-#if USE_SSL
-	ssize = SSL_write(ssl, buf, sz);
-#else
 	ssize = write(sock, buf, sz);
-#endif
+
 	if (ssize < 0)
 		perror("Send error");
 	return ssize;
@@ -68,16 +64,12 @@ int Tcp::sendMessage(char *buf, int sz)
 
 int Tcp::receiveMessage(char *buf, int sz)
 {
-	//rsize = read(sock, buf, sz);
-#if USE_SSL
-	rsize = SSL_read(ssl, buf, sz);
-#else
 	rsize = read(sock, buf, sz);
-#endif
 
 	if(rsize <=0)
 		perror("Receive Error");
 	return rsize;
+
 }
 
 int Tcp::receiveMessage(void)

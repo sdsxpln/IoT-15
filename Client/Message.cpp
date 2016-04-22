@@ -9,7 +9,7 @@ Message::~Message()
 {
 }
 
-void Message::sendMessage(char *buf, int sz)
+int Message::sendMessage(char *buf, int sz)
 {
 }
 
@@ -43,7 +43,6 @@ void Message::handleMessage(char *buf)
 	
 	if (msgReceiveHead->cmd == CMD_ALL_LIVE_BROADCAST_START) 
 	{		
-
 		LiveBroadcast br;
 		br.start();
 		

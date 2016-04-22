@@ -37,7 +37,6 @@ Init::Init()
 	}
 	pclose(fd);
 
-
 	strcpy(this->ip, ip);
 	this->port = atoi(port);
 	this->group_num = atoi(group_num);
