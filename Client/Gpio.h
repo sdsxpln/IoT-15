@@ -14,6 +14,8 @@ public:
 	Gpio();
 	virtual ~Gpio();
 	
-	void checkAmpStatus(Tcp *client, std::mutex *mtx_lock);
+	void setDirection(int pin, std::string direction);
+	int read(int pin);
+	void write(int pin,int val);
 };
 

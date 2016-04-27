@@ -8,7 +8,6 @@
 
 #include "Tcp.h"
 #include "Message.h"
-#include "Gpio.h"
 #include "Device.h"
 #include "Ossl.h"
 
@@ -32,9 +31,9 @@ int main(int argc, char *argv[])
 
 	cout << "**Start Client**" << endl;
 
-	thread th1(workerThread, client, &mtx_lock);						//기능 수행 Thread
-	thread th2(&Gpio::checkAmpStatus, Gpio(), client, &mtx_lock);		//Amp상태 점검 Thread
-	thread th3(&Device::checkAlive, Device(), client, &mtx_lock);		//Device Alive Thread
+	thread th1(workerThread, client, &mtx_lock);							//경보 기능 수행 Thread
+	thread th2(&Device::checkAmpStatus, Device(), client, &mtx_lock);		//Amp상태 점검 Thread
+	thread th3(&Device::checkAlive, Device(), client, &mtx_lock);			//Device Alive Thread
 
 	th1.join();
 	th2.join();

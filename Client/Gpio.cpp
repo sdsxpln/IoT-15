@@ -2,6 +2,10 @@
 
 Gpio::Gpio()
 {
+	if (wiringPiSetupGpio() == -1)
+	{
+		std::cout << "Fail to GPIO setup!!" << std::endl;
+	}
 }
 
 
@@ -9,40 +13,24 @@ Gpio::~Gpio()
 {
 }
 
-void Gpio::checkAmpStatus(Tcp *client, std::mutex *mtx_lock)
+void Gpio::setDirection(int pin, std::string direction)
 {
-	Init config;
-	msgPacket msg;
-	statusAmp *sdata;
-	sdata = (statusAmp *)&msg.data;
-	
-	if (wiringPiSetupGpio() == -1)
+	if (direction == "INPUT")
 	{
-		std::cout << "Fail to GPIO setup!!" << std::endl;
+		pinMode(pin, INPUT);
 	}
-	
-	pinMode(4, INPUT);
-	pinMode(5, OUTPUT);
-	
-	int result = 0;
-	while (1)
+	if (direction == "OUTPUT")
 	{
-		mtx_lock->lock();
-		msg.head.source = config.getGroupNum();
-		msg.head.destination = SERVER;
-		msg.head.cmd = STATUS_AMP;
-		msg.head.len = sizeof(*sdata);
-		
-		//digitalWrite(5, HIGH);
-		delay(1000);
-		if (digitalRead(4) == LOW)
-		{
-			sdata->result = NORMAL;
-			if(client->getConnectStatus())
-				client->sendMessage((char*)client->getpacket(), client->getpacketSize());
-		}
-		mtx_lock->unlock();
-		//digitalWrite(5, LOW);
-		delay(500);	
+		pinMode(5, OUTPUT);
 	}
+}
+int Gpio::read(int pin)
+{
+	return digitalRead(pin);
+}
+
+
+void Gpio::write(int pin, int val)
+{
+	digitalWrite(pin,val);
 }

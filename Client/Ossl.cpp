@@ -34,7 +34,7 @@ void Ossl::setSSL()
    
     /* 개인 키가 사용 가능한 것인지 확인한다. - opt */
 	if (!SSL_CTX_check_private_key(ctx)) {
-		fprintf(stderr, "Private key does not match the certificate public key\n");
+		std::cout << "Private key does not match the certificate public key" << std::endl;
 		exit(5);
 	}
 }
@@ -52,25 +52,24 @@ void Ossl::connectSSL()
 		connetStatus = false;
 	else
 		connetStatus = true;
-   
-	printf("SSL connection using %s\n", SSL_get_cipher(ssl));
+	std::cout << "Private key does not match the certificate public key" <<  SSL_get_cipher(ssl) << std::endl;
   
 	/* Get server's certificate (note: beware of dynamic allocation) - opt */
     /* 서버의 인증서를 받는다. */
 	server_cert = SSL_get_peer_certificate(ssl);
 	CHK_NULL(server_cert);
-	printf("Server certificate:\n");
+	std::cout << "Server certificate:" << std::endl;
    
 	 /* 인증서의 이름을 출력한다. */
 	str = X509_NAME_oneline(X509_get_subject_name(server_cert), 0, 0);
 	CHK_NULL(str);
-	printf("\t subject: %s\n", str);
+	std::cout << "subject: " << str << std::endl;
 	OPENSSL_free(str);
    
 	/* 인증서의 issuer를 출력한다. */
 	str = X509_NAME_oneline(X509_get_issuer_name(server_cert), 0, 0);
 	CHK_NULL(str);
-	printf("\t issuer: %s\n", str);
+	std::cout << "issuer: " << str << std::endl;
 	OPENSSL_free(str);
    
 	X509_free(server_cert);

@@ -35,3 +35,37 @@ void Device::checkAlive(Tcp *client, std::mutex *mtx_lock)
 
 }
 
+void Device::checkAmpStatus(Tcp *client, std::mutex *mtx_lock)
+{
+	Gpio gpio;
+	Init config;
+	msgPacket msg;
+	
+	statusAmp *sdata;
+	sdata = (statusAmp *)&msg.data;
+	
+	gpio.setDirection(4, "INPUT");
+	gpio.setDirection(5, "OUTPUT");
+	
+	while (1)
+	{
+		mtx_lock->lock();
+		msg.head.source = config.getGroupNum();
+		msg.head.destination = SERVER;
+		msg.head.cmd = STATUS_AMP;
+		msg.head.len = sizeof(*sdata);
+		
+		//gpio.write(5, HIGH);
+		sleep(1);
+		if (gpio.read(4) == LOW)
+		{
+			sdata->result = ABNORMAL;
+			client->makePacket(msg);
+			if (client->getConnectStatus())
+				client->sendMessage((char*)client->getpacket(), client->getpacketSize());
+		}
+		//gpio.write(5, LOW);
+		mtx_lock->unlock();
+		sleep(1);
+	}
+}

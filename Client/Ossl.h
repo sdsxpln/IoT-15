@@ -7,7 +7,7 @@
 #include <openssl/err.h>
 #include "Tcp.h"
 
-#define USE_SSL
+//#define USE_SSL
 
 #define CHK_NULL(x) if((x) == NULL) exit(1);
 #define CHK_ERR(err, s) if((err) == -1) { perror(s); exit(1); }

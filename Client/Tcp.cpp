@@ -44,7 +44,7 @@ bool Tcp::connectToServer(void)
 	}
 	else
 	{
-		std::cout << "Connected to sever!!" << std::endl;
+		std::cout << "Connected to server!!" << std::endl;
 		connetStatus = true;
 		return true;
 	}
