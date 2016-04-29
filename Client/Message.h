@@ -29,6 +29,7 @@ public:
 	msgPacket* getpacket();
 	int getpacketSize();
 	void makePacket(msgPacket);
+	bool checkMessage(char *buf,int rsize);
 	
 };
 

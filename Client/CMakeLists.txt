@@ -8,3 +8,4 @@ add_executable(Client Device.cpp Gpio.cpp Client.cpp DisasterBroadcast.cpp Init.
 target_link_libraries(Client -lpthread -lwiringPi -lssl -lcrypto "${LIBRARIES_FROM_REFERENCES}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -std=c++11")

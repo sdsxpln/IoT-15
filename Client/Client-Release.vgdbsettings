@@ -80,6 +80,11 @@
     </Toolchain>
     <MakeCommandTemplate>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <RemoteHost>
+        <HostName>192.168.110.78</HostName>
+        <Transport>SSH</Transport>
+        <UserName>root</UserName>
+      </RemoteHost>
       <Command>make</Command>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
@@ -93,6 +98,11 @@
     </MakeCommandTemplate>
     <CMakeCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <RemoteHost>
+        <HostName>192.168.110.78</HostName>
+        <Transport>SSH</Transport>
+        <UserName>root</UserName>
+      </RemoteHost>
       <Command>cmake</Command>
       <Environment>
         <Records>
@@ -177,6 +187,7 @@
     <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
   </CustomShortcuts>
   <UserDefinedVariables />
+  <ImportedPropertySheets />
   <CodeSense>
     <Enabled>Unknown</Enabled>
     <ExtraSettings>

@@ -67,10 +67,17 @@ void workerThread(Tcp *client, mutex *mtx_lock)
 					break;
 				}
 				client->showMeassge(rbuf, rsize);
-				mtx_lock->lock();				
-				client->handleMessage(rbuf);
-				if (client->getSelectedSend())	//서버로 메시지를 전송할지 결정(Group에 맞지 않으면 패스)
-					client->sendMessage((char*)client->getpacket(), client->getpacketSize());
+				mtx_lock->lock();
+				if (client->checkMessage(rbuf, rsize)) //수신바이트와 데이터 헤더의 길이가 같은지 검사(짧으면 재전송?? 길면 짤라야하나??)
+				{
+					client->handleMessage(rbuf);
+					if (client->getSelectedSend())	//서버로 메시지를 전송할지 결정(Group에 맞지 않으면 패스)
+						client->sendMessage((char*)client->getpacket(), client->getpacketSize());
+				}
+				else
+				{
+					cout << "Different Data Length!!" << endl;
+				}
 				mtx_lock->unlock();				
 			}
 		}

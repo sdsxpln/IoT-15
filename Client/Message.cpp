@@ -521,3 +521,17 @@ void Message::makePacket(msgPacket msg)
 {
 	packet = msg;
 }
+
+bool Message::checkMessage(char *buf, int rsize)
+{
+	msg_head * msgReceiveHead; 
+	
+	msgReceiveHead = (msg_head *)buf;
+	
+	if ( rsize == msgReceiveHead->len+ sizeof(*msgReceiveHead))
+		return true;
+		
+	else
+		return false;
+		
+}

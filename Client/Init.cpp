@@ -10,27 +10,27 @@ Init::Init()
 	
 	
 	FILE *fd;
-	fd = popen("cat ./config.ini | grep 'IP' | awk {'print $3}' | awk 'NR ==1'", "r");
+	fd = popen("cat /home/tmp/config.ini | grep 'IP' | awk {'print $3}' | awk 'NR ==1'", "r");
 	if (fd != NULL) {
 		fgets(ip, sizeof(ip), fd);
 	}
 	pclose(fd);
 	
-	fd = popen("cat ./config.ini | grep 'PORT' | awk {'print $3}' | awk 'NR ==1'", "r");
+	fd = popen("cat /home/tmp/config.ini | grep 'PORT' | awk {'print $3}' | awk 'NR ==1'", "r");
 	
 	if (fd != NULL) {
 		fgets(port, sizeof(port), fd);
 	}
 	pclose(fd);
 	
-	fd = popen("cat ./config.ini | grep 'GROUP' | awk {'print $3}' | awk 'NR ==1'", "r");
+	fd = popen("cat /home/tmp/config.ini | grep 'GROUP' | awk {'print $3}' | awk 'NR ==1'", "r");
 	
 	if (fd != NULL) {
 		fgets(group_num, sizeof(group_num), fd);
 	}
 	pclose(fd);
 	
-	fd = popen("cat ./config.ini | grep 'EQUIP' | awk {'print $3}' | awk 'NR ==1'", "r");
+	fd = popen("cat /home/tmp/config.ini | grep 'EQUIP' | awk {'print $3}' | awk 'NR ==1'", "r");
 	
 	if (fd != NULL) {
 		fgets(dev_num, sizeof(dev_num), fd);
